@@ -1,0 +1,22 @@
+{
+    "type": "postgres",
+    "host": "localhost",
+    "port": 5432,
+    "username": "audionekt_admin",
+    "password": "admin1234",
+    "database": "audionekt_users",
+    "logging": true,
+    "entities": [
+        "dist/models/*.entity{.ts,.js}"
+    ],
+    "seeds": [
+        "dist/seeds/**/*.seeder{.ts,.js}"
+    ],
+    "factories": [
+        "dist/factories/**/*.factory{.ts,.js}"
+    ],
+    "synchronize": true,
+    "cli": {
+        "entitiesDir": "src/models"
+    }
+}
