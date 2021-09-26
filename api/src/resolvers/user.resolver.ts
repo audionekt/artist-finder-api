@@ -31,6 +31,7 @@ export class UserResolver {
         .values({
           id: uuid_v4(),
           email: options.email,
+          username: options.username,
           firstName: options.firstName,
           lastName: options.lastName,
           password: hashedPassword,
