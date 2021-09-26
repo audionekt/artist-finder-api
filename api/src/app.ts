@@ -1,24 +1,25 @@
-import { ApolloServerPluginDrainHttpServer } from "apollo-server-core";
-import { mergeResolvers, mergeTypeDefs } from "@graphql-tools/merge";
-import { createConnection } from "typeorm";
-import { IResolvers } from "@graphql-tools/utils";
+import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
+import { UserResolver } from "./resolvers/user.resolver";
+import { buildTypeDefsAndResolvers } from "type-graphql";
+import { makeExecutableSchema } from "graphql-tools";
 import { ApolloServer } from "apollo-server-koa";
-import { UsersResolver } from "./resolvers/user.resolver";
-import { UsersTypeDef } from "./typedefs/user.typedef";
-import { DocumentNode } from "graphql";
+import { createConnection } from "typeorm";
 import http from "http";
 import Koa from "koa";
 
-let typeDefs = mergeTypeDefs([UsersTypeDef]);
-let resolvers = mergeResolvers([UsersResolver]);
-
-async function startServer(typeDefs: DocumentNode, resolvers: IResolvers) {
+async function startServer() {
   await createConnection();
   const httpServer = http.createServer();
+
+  const { typeDefs, resolvers } = await buildTypeDefsAndResolvers({
+    resolvers: [UserResolver],
+  });
+
+  const schema = makeExecutableSchema({ typeDefs, resolvers });
+
   const server = new ApolloServer({
-    typeDefs,
-    resolvers,
-    plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+    schema,
+    plugins: [ApolloServerPluginLandingPageGraphQLPlayground()],
   });
 
   await server.start();
@@ -32,4 +33,4 @@ async function startServer(typeDefs: DocumentNode, resolvers: IResolvers) {
   return { server, app };
 }
 
-startServer(typeDefs, resolvers);
+startServer();

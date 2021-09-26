@@ -1,7 +1,10 @@
 import { User } from "../models/user.entity";
+import { Resolver, Query } from "type-graphql";
 
-export const UsersResolver = {
-  Query: {
-    users: () => User.find(),
-  },
-};
+@Resolver()
+export class UserResolver {
+  @Query(() => [User])
+  async users(): Promise<User[]> {
+    return await User.find();
+  }
+}

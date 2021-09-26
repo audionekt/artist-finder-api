@@ -1,3 +1,4 @@
+import { Field, ObjectType } from "type-graphql";
 import {
   Entity,
   PrimaryColumn,
@@ -7,15 +8,24 @@ import {
 } from "typeorm";
 import { v4 as uuid_v4 } from "uuid";
 
+@ObjectType()
 @Entity("users")
 export class User extends BaseEntity {
-  @PrimaryColumn("uuid") id: string;
+  @Field(() => String)
+  @PrimaryColumn("uuid")
+  id: string;
 
-  @Column("varchar", { length: 255 }) firstName: string;
+  @Field(() => String)
+  @Column("varchar", { length: 255 })
+  firstName: string;
 
-  @Column("varchar", { length: 255 }) lastName: string;
+  @Field(() => String)
+  @Column("varchar", { length: 255 })
+  lastName: string;
 
-  @Column("varchar", { length: 255 }) email: string;
+  @Field(() => String)
+  @Column("varchar", { length: 255, unique: true })
+  email: string;
 
   @Column("text") password: string;
 
