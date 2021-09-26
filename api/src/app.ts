@@ -1,7 +1,7 @@
 import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
 import { UserResolver } from "./resolvers/user.resolver";
 import { buildTypeDefsAndResolvers } from "type-graphql";
-import { makeExecutableSchema } from "graphql-tools";
+import { makeExecutableSchema } from "@graphql-tools/schema";
 import { ApolloServer } from "apollo-server-koa";
 import { createConnection } from "typeorm";
 import http from "http";

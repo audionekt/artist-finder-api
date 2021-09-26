@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "watch": "rm -rf dist && tsc -w",
-    "start": "nodemon --experimental-specifier-resolution=node dist/app.js",
+    "start": "nodemon --experimental-modules --es-module-specifier-resolution=node dist/app.js",
     "seed:config": "ts-node ./node_modules/typeorm-seeding/dist/cli.js config",
     "seed:run": "ts-node ./node_modules/typeorm-seeding/dist/cli.js seed",
     "docker:up": "docker compose up -d"
@@ -26,7 +26,7 @@
   "dependencies": {
     "apollo-server-core": "^3.3.0",
     "apollo-server-koa": "^3.3.0",
-    "bcryptjs": "^2.4.3",
+    "argon2": "^0.28.2",
     "class-validator": "^0.13.1",
     "dotenv": "^10.0.0",
     "graphql": "^15.5.3",
