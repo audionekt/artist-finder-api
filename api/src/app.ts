@@ -1,5 +1,6 @@
 import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
 import { UserResolver } from "./resolvers/user.resolver";
+import { BandResolver } from "./resolvers/band.resolver";
 import { buildTypeDefsAndResolvers } from "type-graphql";
 import { makeExecutableSchema } from "@graphql-tools/schema";
 import { ApolloServer } from "apollo-server-koa";
@@ -12,7 +13,7 @@ async function startServer() {
   const httpServer = http.createServer();
 
   const { typeDefs, resolvers } = await buildTypeDefsAndResolvers({
-    resolvers: [UserResolver],
+    resolvers: [UserResolver, BandResolver],
   });
 
   const schema = makeExecutableSchema({ typeDefs, resolvers });
