@@ -5,8 +5,10 @@ import {
   Column,
   BeforeInsert,
   BaseEntity,
+  ManyToMany,
 } from "typeorm";
 import { v4 as uuid_v4 } from "uuid";
+import { Band } from "./band.entity";
 
 @ObjectType()
 @Entity("users")
@@ -32,6 +34,10 @@ export class User extends BaseEntity {
   username: string;
 
   @Column("text") password: string;
+
+  @Field(() => [Band])
+  @ManyToMany(() => Band, (band) => band.users)
+  bands?: Band[];
 
   @BeforeInsert()
   addId() {
