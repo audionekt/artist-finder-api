@@ -11,6 +11,11 @@ export class BandResolver {
     return await Band.find();
   }
 
+  @Query(() => Band)
+  async band(@Arg("id") id: string): Promise<Band> {
+    return await Band.findOneOrFail(id);
+  }
+
   @Mutation(() => User)
   async addUserToBand(
     @Arg("userOptions") userOptions: UserOptionsInput,

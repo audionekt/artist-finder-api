@@ -14,6 +14,11 @@ export class UserResolver {
     return await User.find();
   }
 
+  @Query(() => User)
+  async user(@Arg("id") id: string): Promise<User> {
+    return await User.findOneOrFail(id);
+  }
+
   @Mutation(() => UserResponse)
   async register(@Arg("options") options: UserInput): Promise<UserResponse> {
     const errors = validate_register_dto(options);
