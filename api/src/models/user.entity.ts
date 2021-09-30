@@ -37,7 +37,7 @@ export class User extends BaseEntity {
 
   @Field(() => [Band])
   @ManyToMany(() => Band, (band) => band.users)
-  bands?: Band[];
+  bands: Promise<Band[]>;
 
   @BeforeInsert()
   addId() {

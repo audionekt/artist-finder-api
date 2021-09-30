@@ -29,9 +29,11 @@ export class Band extends BaseEntity {
   @Column("text") password: string;
 
   @Field(() => [User])
-  @ManyToMany(() => User, (user) => user.bands, { cascade: true })
+  @ManyToMany(() => User, (user) => user.bands, {
+    cascade: true,
+  })
   @JoinTable({ name: "bands-users" })
-  users: User[];
+  users: Promise<User[]>;
 
   @BeforeInsert()
   addId() {
