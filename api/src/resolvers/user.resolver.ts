@@ -6,7 +6,7 @@ import argon2 from "argon2";
 import { validate_register_dto } from "../utils/register.validation";
 import { v4 as uuid_v4 } from "uuid";
 import { UserResponse } from "../types/userResponse.type";
-import { MyContext } from "src/types/context.type";
+import { MyContext } from "../types/context.type";
 
 @Resolver()
 export class UserResolver {
