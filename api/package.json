@@ -8,7 +8,8 @@
     "start": "nodemon --experimental-modules --es-module-specifier-resolution=node dist/app.js",
     "seed:config": "ts-node ./node_modules/typeorm-seeding/dist/cli.js config",
     "seed:run": "ts-node ./node_modules/typeorm-seeding/dist/cli.js seed",
-    "docker:up": "docker compose up -d"
+    "docker:up": "docker compose up -d",
+    "db:migrate": "npx typeorm migration:generate -n 'test'"
   },
   "keywords": [],
   "author": "",

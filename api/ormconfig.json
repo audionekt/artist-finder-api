@@ -12,11 +12,14 @@
     "seeds": [
         "dist/seeds/**/*.seeder{.ts,.js}"
     ],
+    "migraations": [
+        "dist/migrations/**/*.migration{.ts,.js}"
+    ],
     "factories": [
         "dist/factories/**/*.factory{.ts,.js}"
     ],
-    "synchronize": true,
     "cli": {
-        "entitiesDir": "src/models"
+        "entitiesDir": "src/models",
+        "migrationsDir": "src/migrations"
     }
 }
