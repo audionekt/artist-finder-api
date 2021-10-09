@@ -4,7 +4,6 @@ import { UserInput } from "./inputs/user.input";
 import { getConnection } from "typeorm";
 import argon2 from "argon2";
 import { validate_register_dto } from "../utils/register.validation";
-import { v4 as uuid_v4 } from "uuid";
 import { UserResponse } from "../types/userResponse.type";
 
 @Resolver()
@@ -34,7 +33,6 @@ export class UserResolver {
         .insert()
         .into(User)
         .values({
-          id: uuid_v4(),
           email: options.email,
           username: options.username,
           firstName: options.firstName,
@@ -57,5 +55,42 @@ export class UserResolver {
       }
     }
     return { user };
+  }
+
+  @Mutation(() => UserResponse)
+  async login(
+    @Arg("usernameOrEmail") usernameOrEmail: string,
+    @Arg("password") password: string
+  ): Promise<UserResponse> {
+    const user = await User.findOne(
+      usernameOrEmail.includes("@")
+        ? { where: { email: usernameOrEmail } }
+        : { where: { username: usernameOrEmail } }
+    );
+    if (!user) {
+      return {
+        errors: [
+          {
+            field: "usernameOrEmail",
+            message: "username doesn't exist",
+          },
+        ],
+      };
+    }
+    const valid = await argon2.verify(user.password, password);
+    if (!valid) {
+      return {
+        errors: [
+          {
+            field: "password",
+            message: "password incorrect",
+          },
+        ],
+      };
+    }
+
+    return {
+      user,
+    };
   }
 }

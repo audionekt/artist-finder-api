@@ -9,6 +9,7 @@ import {
 } from "typeorm";
 import { v4 as uuid_v4 } from "uuid";
 import { Band } from "./band.entity";
+import argon2 from "argon2";
 
 @ObjectType()
 @Entity("users")
@@ -40,7 +41,8 @@ export class User extends BaseEntity {
   bands: Promise<Band[]>;
 
   @BeforeInsert()
-  addId() {
+  async alterUserInstance() {
     this.id = uuid_v4();
+    this.password = await argon2.hash("password").then((hash) => hash);
   }
 }

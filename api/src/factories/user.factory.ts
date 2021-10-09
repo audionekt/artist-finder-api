@@ -4,14 +4,13 @@ import * as Faker from "faker";
 import { randomNumber } from "../utils/random-number";
 
 define(User, (faker: typeof Faker) => {
-  const firstName = faker.name.firstName();
-  const lastName = faker.name.lastName();
+  const firstName = faker.name.firstName().toLowerCase();
+  const lastName = faker.name.lastName().toLowerCase();
   const username = `${firstName}.${lastName}${randomNumber(
     1,
     100
   )}`.toLowerCase();
   const email = faker.internet.email(firstName, lastName, "audionekt.com");
-
   const user = new User();
   user.firstName = firstName;
   user.lastName = lastName;
