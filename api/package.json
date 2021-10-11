@@ -16,6 +16,7 @@
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
     "@types/faker": "^5.5.8",
+    "@types/koa-generic-session": "^1.0.6",
     "@types/node": "^16.9.1",
     "@types/uuid": "^8.3.1",
     "@types/validator": "^13.6.3",

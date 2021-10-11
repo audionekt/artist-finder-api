@@ -328,6 +328,13 @@
   dependencies:
     "@types/koa" "*"
 
+"@types/koa-generic-session@^1.0.6":
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/@types/koa-generic-session/-/koa-generic-session-1.0.6.tgz#6463f2929f9c10286e032abe8336c8152d1227c0"
+  integrity sha512-VlWDgiRVbQZzoWdVgPD3cuvFPZqXkEzEICZUme3+y/gYuvyh713PECcEUQRLhL4voQqLpwgP0EMhCJnJH4d3Pg==
+  dependencies:
+    "@types/koa" "*"
+
 "@types/koa@*", "@types/koa@^2.11.6":
   version "2.13.4"
   resolved "https://registry.yarnpkg.com/@types/koa/-/koa-2.13.4.tgz#10620b3f24a8027ef5cbae88b393d1b31205726b"
