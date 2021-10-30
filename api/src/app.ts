@@ -30,6 +30,7 @@ async function startServer() {
   const schema = makeExecutableSchema({ typeDefs, resolvers });
 
   const server = new ApolloServer({
+    introspection: true,
     schema,
     plugins: [ApolloServerPluginLandingPageGraphQLPlayground()],
     context: ({ ctx }): MyContext => ({ ctx, redis }),

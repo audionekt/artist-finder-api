@@ -6,6 +6,7 @@ import argon2 from "argon2";
 import { validate_register_dto } from "../utils/register.validation";
 import { UserResponse } from "../types/type-graphql/userResponse.type";
 import { MyContext } from "../types/context.type";
+import { v4 as uuid_v4 } from "uuid";
 
 @Resolver()
 export class UserResolver {
@@ -39,6 +40,7 @@ export class UserResolver {
         .insert()
         .into(User)
         .values({
+          id: uuid_v4(),
           email: options.email,
           username: options.username,
           firstName: options.firstName,
@@ -49,7 +51,7 @@ export class UserResolver {
         .execute();
       user = result.raw[0];
     } catch (err) {
-      if (err.code === "23505" || err.detail.includes("already exists")) {
+      if (err.code === "23505") {
         return {
           errors: [
             {
@@ -101,5 +103,13 @@ export class UserResolver {
     return {
       user,
     };
+  }
+
+  @Mutation(() => Boolean)
+  logout(@Ctx() { ctx }: any) {
+    return new Promise((resolve) => {
+      ctx.session = null;
+      resolve(true);
+    });
   }
 }

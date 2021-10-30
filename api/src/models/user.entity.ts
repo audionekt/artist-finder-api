@@ -1,15 +1,6 @@
 import { Field, ObjectType } from "type-graphql";
-import {
-  Entity,
-  PrimaryColumn,
-  Column,
-  BeforeInsert,
-  BaseEntity,
-  ManyToMany,
-} from "typeorm";
-import { v4 as uuid_v4 } from "uuid";
+import { Entity, PrimaryColumn, Column, BaseEntity, ManyToMany } from "typeorm";
 import { Band } from "./band.entity";
-import argon2 from "argon2";
 
 @ObjectType()
 @Entity("users")
@@ -40,9 +31,13 @@ export class User extends BaseEntity {
   @ManyToMany(() => Band, (band) => band.users)
   bands: Promise<Band[]>;
 
-  @BeforeInsert()
-  async alterUserInstance() {
-    this.id = uuid_v4();
-    this.password = await argon2.hash("password").then((hash) => hash);
-  }
+  /*  currently not working, will revisit soon
+
+   @BeforeInsert()
+   async alterUserInstance() {
+     this.id = uuid_v4();
+     this.password = await argon2.hash("password").then((hash) => hash);
+   } 
+
+  */
 }

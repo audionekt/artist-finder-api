@@ -1,7 +1,5 @@
 import { Band } from "../models/band.entity";
 import { Resolver, Query, Mutation, Arg } from "type-graphql";
-import { UserOptionsInput } from "./inputs/user-id.input";
-import { BandOptionsInput } from "./inputs/band-id.input";
 import { User } from "../models/user.entity";
 
 @Resolver()
@@ -18,11 +16,11 @@ export class BandResolver {
 
   @Mutation(() => User)
   async addUserToBand(
-    @Arg("userOptions") userOptions: UserOptionsInput,
-    @Arg("bandOptions") bandOptions: BandOptionsInput
+    @Arg("userId") userId: string,
+    @Arg("bandId") bandId: string
   ): Promise<User | string> {
-    let user = await User.findOneOrFail(userOptions);
-    let band = await Band.findOneOrFail(bandOptions);
+    let user = await User.findOneOrFail({id: userId});
+    let band = await Band.findOneOrFail({id: bandId});
 
     if (user) {
       user.bands = Promise.resolve([...(await user.bands), band]);
