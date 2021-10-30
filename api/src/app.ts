@@ -53,16 +53,6 @@ async function startServer() {
     )
   );
 
-
-  // app.use(ctx => {
-  //   // ignore favicon
-  //   if (ctx.path === '/favicon.ico') return;
-  
-  //   let n = ctx.session!.views || 0;
-  //   ctx.session!.views = ++n;
-  //   ctx.body = n + ' views';
-  // });
-  
   server.applyMiddleware({ app, cors: false });
   httpServer.on("request", app.callback());
   await new Promise((resolve: any) =>

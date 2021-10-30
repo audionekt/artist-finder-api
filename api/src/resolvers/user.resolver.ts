@@ -21,8 +21,6 @@ export class UserResolver {
 
   @Query(() => User, { nullable: true })
   me(@Ctx() { ctx }: MyContext) {
-    // console.log("redis", redis);
-
     return User.findOne({ id: ctx.session.userId });
   }
 
@@ -98,7 +96,7 @@ export class UserResolver {
       };
     }
 
-    ctx.session.userId = user.id
+    ctx.session.userId = user.id;
 
     return {
       user,
