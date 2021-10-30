@@ -1,4 +1,4 @@
-import { User } from "../models/user.entity";
+import { User } from "../../models/user.entity";
 import { Field, ObjectType } from "type-graphql";
 import { FieldError } from "./fieldError.type";
 

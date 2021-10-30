@@ -1,10 +1,11 @@
 import { User } from "../models/user.entity";
-import { Resolver, Query, Mutation, Arg } from "type-graphql";
+import { Resolver, Query, Mutation, Arg, Ctx } from "type-graphql";
 import { UserInput } from "./inputs/user.input";
 import { getConnection } from "typeorm";
 import argon2 from "argon2";
 import { validate_register_dto } from "../utils/register.validation";
-import { UserResponse } from "../types/userResponse.type";
+import { UserResponse } from "../types/type-graphql/userResponse.type";
+import { MyContext } from "../types/context.type";
 
 @Resolver()
 export class UserResolver {
@@ -16,6 +17,13 @@ export class UserResolver {
   @Query(() => User)
   async user(@Arg("id") id: string): Promise<User> {
     return await User.findOneOrFail(id);
+  }
+
+  @Query(() => User, { nullable: true })
+  me(@Ctx() { ctx }: MyContext) {
+    // console.log("redis", redis);
+
+    return User.findOne({ id: ctx.session.userId });
   }
 
   @Mutation(() => UserResponse)
@@ -60,7 +68,8 @@ export class UserResolver {
   @Mutation(() => UserResponse)
   async login(
     @Arg("usernameOrEmail") usernameOrEmail: string,
-    @Arg("password") password: string
+    @Arg("password") password: string,
+    @Ctx() { ctx }: MyContext
   ): Promise<UserResponse> {
     const user = await User.findOne(
       usernameOrEmail.includes("@")
@@ -88,6 +97,8 @@ export class UserResolver {
         ],
       };
     }
+
+    ctx.session.userId = user.id
 
     return {
       user,
