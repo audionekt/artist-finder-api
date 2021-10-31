@@ -1,6 +1,6 @@
-import { config } from "./index";
+import { config } from "./config/index";
 
-export const ormconfig: any = {
+const ormconfig: any = {
   type: "postgres",
   host: "localhost",
   port: 5432,
@@ -16,3 +16,5 @@ export const ormconfig: any = {
     entitiesDir: "src/models",
   },
 };
+
+export = ormconfig
