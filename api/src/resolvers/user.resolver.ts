@@ -7,6 +7,7 @@ import { validate_register_dto } from "../utils/register.validation";
 import { UserResponse } from "../types/type-graphql/userResponse.type";
 import { MyContext } from "../types/context.type";
 import { v4 as uuid_v4 } from "uuid";
+import { Band } from "../models/band.entity";
 
 @Resolver()
 export class UserResolver {
@@ -114,7 +115,7 @@ export class UserResolver {
   }
 
   @Mutation(() => UserResponse)
-  async follow(
+  async followUser(
     @Arg("userId") userId: string,
     @Ctx() { ctx }: any
   ): Promise<UserResponse> {
@@ -144,6 +145,36 @@ export class UserResolver {
     }
 
     me.following = Promise.resolve([...(await me.following), userToFollow]);
+    await User.save(me);
+
+    return {
+      user: me,
+    };
+  }
+
+  @Mutation(() => UserResponse)
+  async followBand(
+    @Arg("bandId") bandId: string,
+    @Ctx() { ctx }: any
+  ): Promise<UserResponse> {
+    const me = await User.findOne({ id: ctx.session.userId });
+    const bandToFollow = await Band.findOneOrFail({ id: bandId });
+
+    if (!me) {
+      return {
+        errors: [
+          {
+            field: "id",
+            message: "you need to be logged in to follow bands",
+          },
+        ],
+      };
+    }
+
+    me.bands_following = Promise.resolve([
+      ...(await me.bands_following),
+      bandToFollow,
+    ]);
     await User.save(me);
 
     return {

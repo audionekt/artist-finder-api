@@ -41,6 +41,10 @@ export class User extends BaseEntity {
   @ManyToMany(() => Band, (band) => band.members)
   bands: Promise<Band[]>;
 
+  @Field(() => [Band])
+  @ManyToMany(() => Band, (band) => band.fans)
+  bands_following: Promise<Band[]>;
+
   @Field(() => [User])
   @ManyToMany(() => User, (user) => user.following)
   @JoinTable({ name: "user-followers" })

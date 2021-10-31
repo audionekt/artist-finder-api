@@ -4,7 +4,7 @@
     "port": 5432,
     "username": "audionekt_admin",
     "password": "admin1234",
-    "database": "audionekt_users",
+    "database": "audionekt",
     "logging": true,
     "entities": [
         "dist/models/*.entity{.ts,.js}"
