@@ -33,7 +33,7 @@ export class Band extends BaseEntity {
     cascade: true,
   })
   @JoinTable({ name: "bands-users" })
-  users: Promise<User[]>;
+  members: Promise<User[]>;
 
   @BeforeInsert()
   addId() {

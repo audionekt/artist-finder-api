@@ -118,7 +118,7 @@ export class UserResolver {
     @Arg("userId") userId: string,
     @Ctx() { ctx }: any
   ): Promise<UserResponse> {
-    const me = await User.findOneOrFail({ id: ctx.session.userId });
+    const me = await User.findOne({ id: ctx.session.userId });
     const userToFollow = await User.findOneOrFail({ id: userId });
 
     if (!me) {
