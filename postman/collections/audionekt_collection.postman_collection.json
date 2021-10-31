@@ -16,7 +16,7 @@
 						"body": {
 							"mode": "graphql",
 							"graphql": {
-								"query": "{\n    users {\n        id\n        firstName\n        lastName\n        username\n        email\n        bands {\n            id\n            name\n        }\n    }\n}",
+								"query": "{\n    users {\n        id\n        firstName\n        lastName\n        username\n        email\n        bands {\n            id\n            name\n        }\n        followers {\n            id\n            email\n            username\n        }\n    }\n}",
 								"variables": ""
 							}
 						},
@@ -37,7 +37,7 @@
 						"body": {
 							"mode": "graphql",
 							"graphql": {
-								"query": "query($id: String!) {\n    user(id: $id) {\n        id\n        firstName\n        lastName\n        username\n        email\n        bands {\n            id\n            name\n        }\n    }\n}",
+								"query": "query($id: String!) {\n    user(id: $id) {\n        id\n        firstName\n        lastName\n        username\n        email\n        bands {\n            id\n            name\n        }\n        following {\n            username\n        }\n\n        followers {\n            username\n        }\n    }\n}",
 								"variables": "{\n    \"id\": \"{{userId}}\"\n}"
 							}
 						},
@@ -58,7 +58,7 @@
 						"body": {
 							"mode": "graphql",
 							"graphql": {
-								"query": "{\n    me {\n        id\n        firstName\n        email\n        bands {\n            name\n            users {\n                username\n            }\n        }\n    }\n}",
+								"query": "{\n    me {\n        id\n        firstName\n        email\n        bands {\n            name\n            users {\n                username\n            }\n        }\n        following {\n            id\n            username\n        }\n        followers {\n            username\n        }\n    }\n}",
 								"variables": ""
 							}
 						},
@@ -79,8 +79,8 @@
 						"body": {
 							"mode": "graphql",
 							"graphql": {
-								"query": "mutation($usernameOrEmail: String!, $password: String!) {\n    login(usernameOrEmail: $usernameOrEmail, password: $password) {\n        user {\n            id\n            firstName\n            lastName\n            username\n            email\n            bands {\n                id\n                name\n                users {\n                    email\n                }\n            }\n       }\n    }\n}",
-								"variables": "{\n    \"usernameOrEmail\": \"bartholome.bailey67\",\n    \"password\": \"password\"\n}"
+								"query": "mutation($usernameOrEmail: String!, $password: String!) {\n    login(usernameOrEmail: $usernameOrEmail, password: $password) {\n        user {\n            id\n            firstName\n            lastName\n            username\n            email\n            bands {\n                id\n                name\n                users {\n                    email\n                }\n            }\n            following {\n                username\n            }\n            followers {\n                username\n            }\n       }\n    }\n}",
+								"variables": "{\n    \"usernameOrEmail\": \"arunscape@gmail.com\",\n    \"password\": \"password\"\n}"
 							}
 						},
 						"url": {
@@ -133,6 +133,27 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "follow user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation($userId: String!) {\n    follow(userId: $userId) {\n           user {\n                id\n                username\n                email\n                followers {\n                    username\n                }\n                following {\n                    id\n                    username\n                }\n           }\n           errors {\n               field\n               message\n           }\n    }\n}",
+								"variables": "{\n    \"userId\": \"05e981f2-b4f0-41d3-9c36-a1c91049e92f\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{graphql}}",
+							"host": [
+								"{{graphql}}"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -140,15 +161,15 @@
 			"name": "band",
 			"item": [
 				{
-					"name": "add user to band",
+					"name": "all bands",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "graphql",
 							"graphql": {
-								"query": "mutation($bandId: String!, $userId: String!) {\n    addUserToBand(bandId: $bandId, userId: $userId) {\n            id\n            username\n            email\n            bands {\n                id\n                name\n            }\n    \n    }\n}",
-								"variables": "{\n    \"bandId\": \"8f129964-5820-4815-8298-aaf7dda76d3b\",\n    \"userId\": \"05e981f2-b4f0-41d3-9c36-a1c91049e92f\"\n}"
+								"query": "{\n    bands {\n        id\n        name\n        users {\n            username\n        }\n    }\n}",
+								"variables": ""
 							}
 						},
 						"url": {
@@ -161,15 +182,15 @@
 					"response": []
 				},
 				{
-					"name": "all bands",
+					"name": "add user to band",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "graphql",
 							"graphql": {
-								"query": "{\n    bands {\n        id\n        name\n    }\n}",
-								"variables": ""
+								"query": "mutation($bandId: String!, $userId: String!) {\n    addUserToBand(bandId: $bandId, userId: $userId) {\n           user {\n                id\n                username\n                email\n                bands {\n                    id\n                    name\n                }\n           }\n           errors {\n               field\n               message\n           }\n    }\n}",
+								"variables": "{\n    \"bandId\": \"44967e05-4eea-4d17-9b2f-583902f79d49\",\n    \"userId\": \"95fd93fe-ab66-4156-8bb9-2777370e05d8\"\n}"
 							}
 						},
 						"url": {

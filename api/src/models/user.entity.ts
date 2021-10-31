@@ -1,5 +1,12 @@
 import { Field, ObjectType } from "type-graphql";
-import { Entity, PrimaryColumn, Column, BaseEntity, ManyToMany } from "typeorm";
+import {
+  Entity,
+  PrimaryColumn,
+  Column,
+  BaseEntity,
+  ManyToMany,
+  JoinTable,
+} from "typeorm";
 import { Band } from "./band.entity";
 
 @ObjectType()
@@ -30,6 +37,15 @@ export class User extends BaseEntity {
   @Field(() => [Band])
   @ManyToMany(() => Band, (band) => band.users)
   bands: Promise<Band[]>;
+
+  @Field(() => [User])
+  @ManyToMany(() => User, (user) => user.following)
+  @JoinTable()
+  followers: Promise<User[]>;
+
+  @Field(() => [User])
+  @ManyToMany(() => User, (user) => user.followers)
+  following: Promise<User[]>;
 
   /*  currently not working, will revisit soon
 

@@ -112,4 +112,42 @@ export class UserResolver {
       resolve(true);
     });
   }
+
+  @Mutation(() => UserResponse)
+  async follow(
+    @Arg("userId") userId: string,
+    @Ctx() { ctx }: any
+  ): Promise<UserResponse> {
+    const me = await User.findOneOrFail({ id: ctx.session.userId });
+    const userToFollow = await User.findOneOrFail({ id: userId });
+
+    if (!me) {
+      return {
+        errors: [
+          {
+            field: "id",
+            message: "you need to be logged in to follow people",
+          },
+        ],
+      };
+    }
+
+    if (me.id === userId) {
+      return {
+        errors: [
+          {
+            field: "id",
+            message: "you can't follow yourself",
+          },
+        ],
+      };
+    }
+
+    me.following = Promise.resolve([...(await me.following), userToFollow]);
+    await User.save(me);
+
+    return {
+      user: me,
+    };
+  }
 }

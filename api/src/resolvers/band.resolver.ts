@@ -1,6 +1,7 @@
 import { Band } from "../models/band.entity";
 import { Resolver, Query, Mutation, Arg } from "type-graphql";
 import { User } from "../models/user.entity";
+import { UserResponse } from "../types/type-graphql/userResponse.type";
 
 @Resolver()
 export class BandResolver {
@@ -14,20 +15,31 @@ export class BandResolver {
     return await Band.findOneOrFail(id);
   }
 
-  @Mutation(() => User)
+  @Mutation(() => UserResponse)
   async addUserToBand(
     @Arg("userId") userId: string,
     @Arg("bandId") bandId: string
-  ): Promise<User | string> {
-    let user = await User.findOneOrFail({id: userId});
-    let band = await Band.findOneOrFail({id: bandId});
+  ): Promise<UserResponse> {
+    let user = await User.findOne({ id: userId });
+    let band = await Band.findOneOrFail({ id: bandId });
 
-    if (user) {
-      user.bands = Promise.resolve([...(await user.bands), band]);
-      await User.save(user);
-      return user;
+    if (!user) {
+      return {
+        errors: [
+          {
+            field: "id",
+            message:
+              "something's up, check both id's and make sure the instances exist.",
+          },
+        ],
+      };
     }
 
-    return "failed to run query";
+    user.bands = Promise.resolve([...(await user.bands), band]);
+    await User.save(user);
+
+    return {
+      user,
+    };
   }
 }
