@@ -15,12 +15,13 @@ import redisStore from "koa-redis";
 import { redis } from "./redis/client";
 import { TIME } from "./utils/time-intervals";
 import { MyContext } from "./types/context.type";
+import { ormconfig } from "./config/ormconfig";
 
 async function startServer() {
   dotenv.config();
   const { server_port } = config;
 
-  await createConnection();
+  await createConnection(ormconfig);
   const httpServer = http.createServer();
 
   const { typeDefs, resolvers } = await buildTypeDefsAndResolvers({
