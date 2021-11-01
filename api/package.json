@@ -9,7 +9,7 @@
     "seed:config": "ts-node ./node_modules/typeorm-seeding/dist/cli.js config -r ${PWD}/src -n ormconfig.ts",
     "seed:run": "ts-node ./node_modules/typeorm-seeding/dist/cli.js seed -r ${PWD}/src -n ormconfig.ts",
     "docker:start": "docker compose up -d",
-    "docker:stop": "docker stop (docker ps -aq) && docker rm (docker ps -aq)"
+    "docker:stop": "docker stop $(docker ps -aq) && docker rm $(docker ps -aq)"
   },
   "keywords": [],
   "author": "",

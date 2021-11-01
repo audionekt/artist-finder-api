@@ -120,7 +120,7 @@ export class UserResolver {
     @Ctx() { ctx }: any
   ): Promise<UserResponse> {
     const me = await User.findOne({ id: ctx.session.userId });
-    const userToFollow = await User.findOneOrFail({ id: userId });
+    const userToFollow = await User.findOne({ id: userId });
 
     if (!me) {
       return {
@@ -128,6 +128,17 @@ export class UserResolver {
           {
             field: "id",
             message: "you need to be logged in to follow people",
+          },
+        ],
+      };
+    }
+    
+    if (!userToFollow) {
+      return {
+        errors: [
+          {
+            field: "id",
+            message: "the user you're trying to follow doesn't exist",
           },
         ],
       };
