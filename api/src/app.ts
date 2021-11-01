@@ -15,7 +15,6 @@ import redisStore from "koa-redis";
 import { redis } from "./redis/client";
 import { TIME } from "./utils/time-intervals";
 import { MyContext } from "./types/context.type";
-// import { ormconfig } from "./ormconfig";
 import ormconfig = require("./ormconfig")
 
 async function startServer() {
