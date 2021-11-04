@@ -1,6 +1,6 @@
 import "reflect-metadata";
 import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
-import { UserResolver } from "./resolvers/user.resolver";
+import { ArtistResolver } from "./resolvers/artist.resolver";
 import { BandResolver } from "./resolvers/band.resolver";
 import { buildTypeDefsAndResolvers } from "type-graphql";
 import { makeExecutableSchema } from "@graphql-tools/schema";
@@ -15,7 +15,7 @@ import redisStore from "koa-redis";
 import { redis } from "./redis/client";
 import { TIME } from "./utils/time-intervals";
 import { MyContext } from "./types/context.type";
-import ormconfig = require("./ormconfig")
+import ormconfig = require("./ormconfig");
 
 async function startServer() {
   dotenv.config();
@@ -25,7 +25,7 @@ async function startServer() {
   const httpServer = http.createServer();
 
   const { typeDefs, resolvers } = await buildTypeDefsAndResolvers({
-    resolvers: [UserResolver, BandResolver],
+    resolvers: [ArtistResolver, BandResolver],
   });
 
   const schema = makeExecutableSchema({ typeDefs, resolvers });

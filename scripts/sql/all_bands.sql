@@ -1,2 +1,2 @@
-SELECT * FROM public.bands
+SELECT * FROM public.band
 ORDER BY id ASC

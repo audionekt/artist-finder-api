@@ -1,45 +1,47 @@
-import { User } from "../models/user.entity";
+import { Artist } from "../models/artist.entity";
 import { Resolver, Query, Mutation, Arg, Ctx } from "type-graphql";
-import { UserInput } from "./inputs/user.input";
+import { ArtistInput } from "./inputs/artist.input";
 import { getConnection } from "typeorm";
 import argon2 from "argon2";
 import { validate_register_dto } from "../utils/register.validation";
-import { UserResponse } from "../types/type-graphql/userResponse.type";
+import { ArtistResponse } from "../types/type-graphql/artist-response.type";
 import { MyContext } from "../types/context.type";
 import { v4 as uuid_v4 } from "uuid";
 import { Band } from "../models/band.entity";
 
 @Resolver()
-export class UserResolver {
-  @Query(() => [User])
-  async users(): Promise<User[]> {
-    return await User.find();
+export class ArtistResolver {
+  @Query(() => [Artist])
+  async artists(): Promise<Artist[]> {
+    return await Artist.find();
   }
 
-  @Query(() => User)
-  async user(@Arg("id") id: string): Promise<User> {
-    return await User.findOneOrFail(id);
+  @Query(() => Artist)
+  async artist(@Arg("id") id: string): Promise<Artist> {
+    return await Artist.findOneOrFail(id);
   }
 
-  @Query(() => User, { nullable: true })
+  @Query(() => Artist, { nullable: true })
   me(@Ctx() { ctx }: MyContext) {
-    return User.findOne({ id: ctx.session.userId });
+    return Artist.findOne({ id: ctx.session.artistId });
   }
 
-  @Mutation(() => UserResponse)
-  async register(@Arg("options") options: UserInput): Promise<UserResponse> {
+  @Mutation(() => ArtistResponse)
+  async register(
+    @Arg("options") options: ArtistInput
+  ): Promise<ArtistResponse> {
     const errors = validate_register_dto(options);
     if (errors) {
       return { errors };
     }
 
     const hashedPassword = await argon2.hash(options.password);
-    let user;
+    let artist;
     try {
       const result = await getConnection()
         .createQueryBuilder()
         .insert()
-        .into(User)
+        .into(Artist)
         .values({
           id: uuid_v4(),
           email: options.email,
@@ -50,7 +52,7 @@ export class UserResolver {
         })
         .returning("*")
         .execute();
-      user = result.raw[0];
+      artist = result.raw[0];
     } catch (err) {
       if (err.code === "23505") {
         return {
@@ -63,21 +65,21 @@ export class UserResolver {
         };
       }
     }
-    return { user };
+    return { artist };
   }
 
-  @Mutation(() => UserResponse)
+  @Mutation(() => ArtistResponse)
   async login(
     @Arg("usernameOrEmail") usernameOrEmail: string,
     @Arg("password") password: string,
     @Ctx() { ctx }: MyContext
-  ): Promise<UserResponse> {
-    const user = await User.findOne(
+  ): Promise<ArtistResponse> {
+    const artist = await Artist.findOne(
       usernameOrEmail.includes("@")
         ? { where: { email: usernameOrEmail } }
         : { where: { username: usernameOrEmail } }
     );
-    if (!user) {
+    if (!artist) {
       return {
         errors: [
           {
@@ -87,7 +89,7 @@ export class UserResolver {
         ],
       };
     }
-    const valid = await argon2.verify(user.password, password);
+    const valid = await argon2.verify(artist.password, password);
     if (!valid) {
       return {
         errors: [
@@ -99,10 +101,10 @@ export class UserResolver {
       };
     }
 
-    ctx.session.userId = user.id;
+    ctx.session.artistId = artist.id;
 
     return {
-      user,
+      artist,
     };
   }
 
@@ -114,13 +116,13 @@ export class UserResolver {
     });
   }
 
-  @Mutation(() => UserResponse)
-  async followUser(
-    @Arg("userId") userId: string,
+  @Mutation(() => ArtistResponse)
+  async followArtist(
+    @Arg("artistId") artistId: string,
     @Ctx() { ctx }: any
-  ): Promise<UserResponse> {
-    const me = await User.findOne({ id: ctx.session.userId });
-    const userToFollow = await User.findOne({ id: userId });
+  ): Promise<ArtistResponse> {
+    const me = await Artist.findOne({ id: ctx.session.artistId });
+    const artistToFollow = await Artist.findOne({ id: artistId });
 
     if (!me) {
       return {
@@ -132,19 +134,19 @@ export class UserResolver {
         ],
       };
     }
-    
-    if (!userToFollow) {
+
+    if (!artistToFollow) {
       return {
         errors: [
           {
             field: "id",
-            message: "the user you're trying to follow doesn't exist",
+            message: "the artist you're trying to follow doesn't exist",
           },
         ],
       };
     }
 
-    if (me.id === userId) {
+    if (me.id === artistId) {
       return {
         errors: [
           {
@@ -155,20 +157,20 @@ export class UserResolver {
       };
     }
 
-    me.following = Promise.resolve([...(await me.following), userToFollow]);
-    await User.save(me);
+    me.following = Promise.resolve([...(await me.following), artistToFollow]);
+    await Artist.save(me);
 
     return {
-      user: me,
+      artist: me,
     };
   }
 
-  @Mutation(() => UserResponse)
+  @Mutation(() => ArtistResponse)
   async followBand(
     @Arg("bandId") bandId: string,
     @Ctx() { ctx }: any
-  ): Promise<UserResponse> {
-    const me = await User.findOne({ id: ctx.session.userId });
+  ): Promise<ArtistResponse> {
+    const me = await Artist.findOne({ id: ctx.session.artistId });
     const bandToFollow = await Band.findOneOrFail({ id: bandId });
 
     if (!me) {
@@ -186,10 +188,10 @@ export class UserResolver {
       ...(await me.bands_following),
       bandToFollow,
     ]);
-    await User.save(me);
+    await Artist.save(me);
 
     return {
-      user: me,
+      artist: me,
     };
   }
 }

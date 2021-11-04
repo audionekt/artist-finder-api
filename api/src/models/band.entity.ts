@@ -1,50 +1,28 @@
 import { Field, ObjectType } from "type-graphql";
-import {
-  Entity,
-  PrimaryColumn,
-  Column,
-  BeforeInsert,
-  BaseEntity,
-  ManyToMany,
-  JoinTable,
-} from "typeorm";
-import { v4 as uuid_v4 } from "uuid";
-import { User } from "./user.entity";
+import { Entity, ManyToMany, JoinTable } from "typeorm";
+import { Artist } from "./artist.entity";
+import { User } from "./common.entity";
 
 @ObjectType()
-@Entity("bands")
-export class Band extends BaseEntity {
+@Entity("band")
+export class Band extends User {
   @Field(() => String)
-  @PrimaryColumn("uuid")
   id: string;
 
   @Field(() => String)
-  @Column("varchar", { length: 255 })
-  name: string;
-
-  @Field(() => String)
-  @Column("varchar", { length: 255, unique: true })
   username: string;
-
-  @Column("text") password: string;
-
-  @Field(() => [User])
-  @ManyToMany(() => User, (user) => user.bands, {
+  
+  @Field(() => [Artist])
+  @ManyToMany(() => Artist, (artist) => artist.bands, {
     cascade: true,
   })
   @JoinTable({ name: "band-members" })
-  members: Promise<User[]>;
+  members: Promise<Artist[]>;
 
-
-  @Field(() => [User])
-  @ManyToMany(() => User, (user) => user.bands_following, {
+  @Field(() => [Artist])
+  @ManyToMany(() => Artist, (artist) => artist.bands_following, {
     cascade: true,
   })
   @JoinTable({ name: "band-fans" })
-  fans: Promise<User[]>;
-
-  @BeforeInsert()
-  addId() {
-    this.id = uuid_v4();
-  }
+  fans: Promise<Artist[]>;
 }

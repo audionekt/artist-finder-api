@@ -1,7 +1,7 @@
 import { Band } from "../models/band.entity";
 import { Resolver, Query, Mutation, Arg } from "type-graphql";
-import { User } from "../models/user.entity";
-import { UserResponse } from "../types/type-graphql/userResponse.type";
+import { Artist } from "../models/artist.entity";
+import { ArtistResponse } from "../types/type-graphql/artist-response.type";
 
 @Resolver()
 export class BandResolver {
@@ -15,15 +15,15 @@ export class BandResolver {
     return await Band.findOneOrFail(id);
   }
 
-  @Mutation(() => UserResponse)
-  async addUserToBand(
-    @Arg("userId") userId: string,
+  @Mutation(() => ArtistResponse)
+  async addArtistToBand(
+    @Arg("artistId") artistId: string,
     @Arg("bandId") bandId: string
-  ): Promise<UserResponse> {
-    let user = await User.findOne({ id: userId });
+  ): Promise<ArtistResponse> {
+    let artist = await Artist.findOne({ id: artistId });
     let band = await Band.findOneOrFail({ id: bandId });
 
-    if (!user) {
+    if (!artist) {
       return {
         errors: [
           {
@@ -35,11 +35,11 @@ export class BandResolver {
       };
     }
 
-    user.bands = Promise.resolve([...(await user.bands), band]);
-    await User.save(user);
+    artist.bands = Promise.resolve([...(await artist.bands), band]);
+    await Artist.save(artist);
 
     return {
-      user,
+      artist,
     };
   }
 }

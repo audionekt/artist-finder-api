@@ -1,6 +1,6 @@
-import { UserInput } from "../resolvers/inputs/user.input";
+import { ArtistInput } from "../resolvers/inputs/artist.input";
 
-export const validate_register_dto = (options: UserInput) => {
+export const validate_register_dto = (options: ArtistInput) => {
   if (!options.email.includes("@")) {
     return [
       {

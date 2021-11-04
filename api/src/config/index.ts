@@ -1,4 +1,4 @@
-import * as Interfaces from "../interfaces";
+import * as Interfaces from "../interfaces/config";
 
 export const config: Interfaces.IConfig = {
   server_port: parseInt(process.env.SERVER_PORT!) || 4000,
