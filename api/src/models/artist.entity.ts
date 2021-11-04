@@ -6,15 +6,15 @@ import { User } from "./common.entity";
 @ObjectType()
 @Entity("artist")
 export class Artist extends User {
+  /* Extended */
   @Field(() => String)
   id: string;
-
   @Field(() => String)
   username: string;
-
   @Field(() => String)
   email: string;
 
+  /* Unique */
   @Field(() => String)
   @Column("varchar", { length: 255 })
   firstName: string;
@@ -23,6 +23,7 @@ export class Artist extends User {
   @Column("varchar", { length: 255 })
   lastName: string;
 
+  /* References */
   @Field(() => [Band])
   @ManyToMany(() => Band, (band) => band.members)
   bands: Promise<Band[]>;

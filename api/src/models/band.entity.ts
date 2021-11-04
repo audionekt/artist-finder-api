@@ -6,12 +6,15 @@ import { User } from "./common.entity";
 @ObjectType()
 @Entity("band")
 export class Band extends User {
+  /* Extended */
   @Field(() => String)
   id: string;
-
   @Field(() => String)
   username: string;
-  
+  @Field(() => String)
+  email: string;
+
+  /* References */
   @Field(() => [Artist])
   @ManyToMany(() => Artist, (artist) => artist.bands, {
     cascade: true,
