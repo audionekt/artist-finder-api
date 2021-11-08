@@ -5,6 +5,8 @@ export class ArtistInput {
   @Field()
   email: string;
   @Field()
+  bio: string;
+  @Field()
   username: string;
   @Field()
   firstName: string;

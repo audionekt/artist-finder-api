@@ -13,19 +13,21 @@ export class Band extends User {
   username: string;
   @Field(() => String)
   email: string;
+  @Field(() => String)
+  bio: string;
 
   /* References */
   @Field(() => [Artist])
   @ManyToMany(() => Artist, (artist) => artist.bands, {
     cascade: true,
   })
-  @JoinTable({ name: "band-members" })
+  @JoinTable({ name: "band_members" })
   members: Promise<Artist[]>;
 
   @Field(() => [Artist])
   @ManyToMany(() => Artist, (artist) => artist.bands_following, {
     cascade: true,
   })
-  @JoinTable({ name: "band-fans" })
+  @JoinTable({ name: "band_fans" })
   fans: Promise<Artist[]>;
 }

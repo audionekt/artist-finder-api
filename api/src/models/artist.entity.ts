@@ -13,6 +13,8 @@ export class Artist extends User {
   username: string;
   @Field(() => String)
   email: string;
+  @Field(() => String)
+  bio: string;
 
   /* Unique */
   @Field(() => String)
@@ -34,7 +36,7 @@ export class Artist extends User {
 
   @Field(() => [Artist])
   @ManyToMany(() => Artist, (artist) => artist.following)
-  @JoinTable({ name: "artist-followers" })
+  @JoinTable({ name: "artist_followers" })
   followers: Promise<Artist[]>;
 
   @Field(() => [Artist])

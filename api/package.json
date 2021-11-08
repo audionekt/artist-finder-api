@@ -6,10 +6,14 @@
   "scripts": {
     "watch": "rm -rf dist && tsc -w",
     "start": "nodemon dist/app.js",
-    "seed:config": "ts-node ./node_modules/typeorm-seeding/dist/cli.js config -r ${PWD}/src -n ormconfig.ts",
-    "seed:run": "ts-node ./node_modules/typeorm-seeding/dist/cli.js seed -r ${PWD}/src -n ormconfig.ts",
-    "docker:start": "docker compose up -d",
-    "docker:stop": "docker stop $(docker ps -aq) && docker rm $(docker ps -aq)"
+    "db:seed-config": "ts-node ./node_modules/typeorm-seeding/dist/cli.js config -r ${PWD}/src -n ormconfig.ts",
+    "db:seed": "ts-node ./node_modules/typeorm-seeding/dist/cli.js seed -r ${PWD}/src -n ormconfig.ts",
+    "db:destroy": "../scripts/run.sh clear_db",
+    "db:drop_tables": "../scripts/run.sh drop_tables",
+    "docker:start": "docker compose up -d && ../scripts/run.sh postgis_extension",
+    "docker:stop": "docker stop $(docker ps -aq) && docker rm $(docker ps -aq)",
+    "query:artists": "../scripts/run.sh all_artists",
+    "query:bands": "../scripts/run.sh all_bands"
   },
   "keywords": [],
   "author": "",

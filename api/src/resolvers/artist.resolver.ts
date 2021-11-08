@@ -44,6 +44,7 @@ export class ArtistResolver {
         .into(Artist)
         .values({
           id: uuid_v4(),
+          bio: options.bio,
           email: options.email,
           username: options.username,
           firstName: options.firstName,

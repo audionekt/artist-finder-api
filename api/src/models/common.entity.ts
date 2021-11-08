@@ -19,6 +19,9 @@ export abstract class User extends BaseEntity {
   @Column("varchar", { length: 255, unique: true })
   email: string;
 
+  @Column("varchar", { length: 150 })
+  bio: string;
+
   @BeforeInsert()
   async alterArtistInstance() {
     this.id = uuid_v4();
