@@ -1,4 +1,8 @@
-version: "3.4"
+# docker-compose build
+version: "3.0"
+volumes:
+  postgis-data:
+  pgadmin:
 
 services:
   redis:
@@ -7,18 +11,25 @@ services:
       - "6401:6379"
     restart: always
 
-  postgres:
-    image: postgres:13
+  postgis:
+    image: mdillon/postgis
+    volumes:
+      - postgis-data:/var/lib/postgresql/data
     environment:
-      - POSTGRES_USER=audionekt_admin
-      - POSTGRES_PASSWORD=admin1234
-      - POSTGRES_DB=audionekt
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASS=${DB_PASSWORD}
     ports:
-      - "5432:5432"
+      - 5432:5432
+    restart: always
+
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=${DB_EMAIL}
+      - PGADMIN_DEFAULT_PASSWORD=${DB_DEFAULT_PASSWORD}
+    ports:
+      - "5050:80"
     restart: always
     volumes:
-      - database-data:/var/lib/postgresql/data/
-
-volumes:
-  database-data:
-  pgadmin:
+      - pgadmin:/root/.pgadmin
