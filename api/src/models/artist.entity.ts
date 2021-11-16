@@ -1,7 +1,9 @@
 import { Field, ObjectType } from "type-graphql";
-import { Entity, Column, ManyToMany, JoinTable } from "typeorm";
+import { Entity, Column, ManyToMany, JoinTable, Index } from "typeorm";
 import { Band } from "./band.entity";
 import { User } from "./common.entity";
+import { Point } from "geojson";
+import { Geometry } from "./geometry.entity";
 
 @ObjectType()
 @Entity("artist")
@@ -24,6 +26,16 @@ export class Artist extends User {
   @Field(() => String)
   @Column("varchar", { length: 255 })
   lastName: string;
+
+  @Field(() => Geometry)
+  @Index({ spatial: true })
+  @Column({
+    type: "geography",
+    spatialFeatureType: "Point",
+    srid: 4326,
+    nullable: true,
+  })
+  geometry: Point;
 
   /* References */
   @Field(() => [Band])

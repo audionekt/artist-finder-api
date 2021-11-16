@@ -8,12 +8,9 @@
     "start": "nodemon dist/app.js",
     "db:seed-config": "ts-node ./node_modules/typeorm-seeding/dist/cli.js config -r ${PWD}/src -n ormconfig.ts",
     "db:seed": "ts-node ./node_modules/typeorm-seeding/dist/cli.js seed -r ${PWD}/src -n ormconfig.ts",
-    "db:destroy": "../scripts/run.sh ../scripts/sql/clear_db",
-    "db:drop": "../scripts/run.sh ../scripts/sql/drop_tables",
+    "db:run": "../scripts/run.sh ${file}",
     "docker:start": "docker compose up -d",
-    "docker:stop": "docker stop $(docker ps -aq) && docker rm $(docker ps -aq) && docker volume rm $(docker volume ls -q)",
-    "query:artists": "../scripts/run.sh ../scripts/sql/all_artists",
-    "query:bands": "../scripts/run.sh ../scripts/sql/all_bands"
+    "docker:stop": "docker stop $(docker ps -aq) && docker rm $(docker ps -aq) && docker volume rm $(docker volume ls -q)"
   },
   "keywords": [],
   "author": "",
@@ -33,6 +30,7 @@
     "typescript": "^4.4.3"
   },
   "dependencies": {
+    "@types/geojson": "^7946.0.8",
     "apollo-server-core": "^3.3.0",
     "apollo-server-koa": "^3.3.0",
     "argon2": "^0.28.2",

@@ -80,6 +80,8 @@ export class ArtistResolver {
         ? { where: { email: usernameOrEmail } }
         : { where: { username: usernameOrEmail } }
     );
+
+    // TODO: grab latitude / longitude from front end and update in db
     if (!artist) {
       return {
         errors: [
@@ -110,7 +112,12 @@ export class ArtistResolver {
   }
 
   @Mutation(() => Boolean)
-  logout(@Ctx() { ctx }: any) {
+  async logout(@Ctx() { ctx }: any) {
+    let me = await Artist.findOneOrFail({ id: ctx.session.artistId });
+    me.geometry = {
+      type: "Point",
+      coordinates: [],
+    };
     return new Promise((resolve) => {
       ctx.session = null;
       resolve(true);
